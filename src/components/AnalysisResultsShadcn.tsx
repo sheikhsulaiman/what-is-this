@@ -2,12 +2,21 @@ import React, { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
+import { Button } from "@/components/ui/button";
 import {
   Tooltip,
   TooltipContent,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
-import { Loader2, Search, Tag, FileText, AlertCircle } from "lucide-react";
+import {
+  Loader2,
+  Search,
+  Tag,
+  FileText,
+  AlertCircle,
+  Volume2,
+  VolumeX,
+} from "lucide-react";
 import type { AnalysisResult } from "@/services/azureVision";
 
 interface AnalysisResultsProps {
@@ -26,12 +35,31 @@ const AnalysisResults: React.FC<AnalysisResultsProps> = ({
   const [selectedObjectIndex, setSelectedObjectIndex] = useState<number | null>(
     null
   );
+  const [speechEnabled, setSpeechEnabled] = useState<boolean>(true);
   const [imageDimensions, setImageDimensions] = useState<{
     displayWidth: number;
     displayHeight: number;
     naturalWidth: number;
     naturalHeight: number;
   }>({ displayWidth: 0, displayHeight: 0, naturalWidth: 0, naturalHeight: 0 });
+
+  // Text-to-speech functionality
+  const speakText = (text: string) => {
+    // Check if speech is enabled and speech synthesis is supported
+    if (speechEnabled && "speechSynthesis" in window) {
+      // Cancel any ongoing speech
+      window.speechSynthesis.cancel();
+
+      // Create a new speech utterance
+      const utterance = new SpeechSynthesisUtterance(text);
+      utterance.rate = 1.0; // Normal speed
+      utterance.pitch = 1.0; // Normal pitch
+      utterance.volume = 0.8; // Slightly lower volume
+
+      // Speak the text
+      window.speechSynthesis.speak(utterance);
+    }
+  };
 
   // Function to capitalize first letter of a string
   const capitalizeFirstLetter = (text: string): string => {
@@ -92,10 +120,30 @@ const AnalysisResults: React.FC<AnalysisResultsProps> = ({
         {selectedImage && results && results.objects.length > 0 && (
           <Card className="max-w-5xl">
             <CardHeader>
-              <CardTitle className="flex items-center gap-2">
-                <Search className="h-5 w-5" />
-                Image with Object Detection
-              </CardTitle>
+              <div className="flex items-center justify-between">
+                <CardTitle className="flex items-center gap-2">
+                  <Search className="h-5 w-5" />
+                  Image with Object Detection
+                </CardTitle>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={() => setSpeechEnabled(!speechEnabled)}
+                  className="flex items-center gap-2"
+                >
+                  {speechEnabled ? (
+                    <>
+                      <Volume2 className="h-4 w-4" />
+                      <span className="hidden sm:inline">Audio On</span>
+                    </>
+                  ) : (
+                    <>
+                      <VolumeX className="h-4 w-4" />
+                      <span className="hidden sm:inline">Audio Off</span>
+                    </>
+                  )}
+                </Button>
+              </div>
             </CardHeader>
             <CardContent>
               <div className="relative">
@@ -149,6 +197,7 @@ const AnalysisResults: React.FC<AnalysisResultsProps> = ({
                             onClick={() =>
                               setSelectedObjectIndex(isSelected ? null : index)
                             }
+                            onMouseEnter={() => speakText(obj.object)}
                           />
                         </TooltipTrigger>
                         <TooltipContent className="bg-gray-900 text-white border-gray-700">
@@ -213,6 +262,7 @@ const AnalysisResults: React.FC<AnalysisResultsProps> = ({
                               selectedObjectIndex === index ? null : index
                             )
                           }
+                          onMouseEnter={() => speakText(obj.object)}
                         >
                           <div className="flex items-center gap-3">
                             <h4 className="font-medium capitalize">
