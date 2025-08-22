@@ -76,7 +76,7 @@ function App() {
         />
       </div>
       {/* Footer */}
-      <footer className="absolute bottom-0 left-0 right-0 text-center text-sm text-muted-foreground py-8">
+      <footer className="text-center text-sm text-muted-foreground py-8">
         <p>Powered by Azure Computer Vision API</p>
       </footer>
     </div>

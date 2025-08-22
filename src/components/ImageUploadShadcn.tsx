@@ -80,7 +80,7 @@ const ImageUpload: React.FC<ImageUploadProps> = ({
               <img
                 src={previewUrl}
                 alt="Preview"
-                className="w-full max-h-96 object-contain rounded-lg border"
+                className="w-full h-auto object-contain rounded-lg border"
               />
               <div className="flex gap-3 justify-center">
                 <Button
