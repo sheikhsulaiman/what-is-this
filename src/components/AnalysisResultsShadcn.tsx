@@ -16,6 +16,12 @@ const AnalysisResults: React.FC<AnalysisResultsProps> = ({
   loading,
   error,
 }) => {
+  // Function to capitalize first letter of a string
+  const capitalizeFirstLetter = (text: string): string => {
+    if (!text) return text;
+    return text.charAt(0).toUpperCase() + text.slice(1);
+  };
+
   if (loading) {
     return (
       <Card className="w-full max-w-2xl mx-auto flex-1">
@@ -77,7 +83,7 @@ const AnalysisResults: React.FC<AnalysisResultsProps> = ({
             <CardContent className="space-y-3">
               {results.description.map((desc, index) => (
                 <p key={index} className="text-sm leading-relaxed">
-                  {desc}
+                  {capitalizeFirstLetter(desc)}
                 </p>
               ))}
             </CardContent>
