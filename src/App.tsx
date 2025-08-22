@@ -1,12 +1,11 @@
 import { useState } from "react";
-import ImageUpload from "./components/ImageUpload";
-import AnalysisResults from "./components/AnalysisResults";
-import DemoInfo from "./components/DemoInfo";
+import ImageUpload from "./components/ImageUploadShadcn";
+import AnalysisResults from "./components/AnalysisResultsShadcn";
+import DemoInfo from "./components/DemoInfoShadcn";
 import {
   azureVisionService,
   type AnalysisResult,
 } from "./services/azureVision";
-import "./App.css";
 
 function App() {
   const [analysisResult, setAnalysisResult] = useState<AnalysisResult | null>(
@@ -14,15 +13,13 @@ function App() {
   );
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [selectedImage, setSelectedImage] = useState<string | null>(null);
 
   // Check if Azure credentials are configured
   const isAzureConfigured =
     import.meta.env.VITE_AZURE_VISION_KEY &&
     import.meta.env.VITE_AZURE_VISION_ENDPOINT;
 
-  const handleImageSelect = async (file: File, imageUrl: string) => {
-    setSelectedImage(imageUrl);
+  const handleImageSelect = async (file: File) => {
     setAnalysisResult(null);
     setError(null);
 
@@ -49,40 +46,42 @@ function App() {
   };
 
   return (
-    <div className="app">
-      <header className="app-header">
-        <h1>🔍 What Is This?</h1>
-        <p>Upload an image to identify objects using Azure Computer Vision</p>
-      </header>
-
-      <main className="app-main">
-        {!isAzureConfigured && <DemoInfo />}
-
-        <div className="upload-section">
-          <ImageUpload onImageSelect={handleImageSelect} disabled={loading} />
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50 dark:from-gray-900 dark:via-blue-900 dark:to-purple-900">
+      <div className="container mx-auto px-4 py-8 space-y-8">
+        {/* Header */}
+        <div className="text-center space-y-4">
+          <h1 className="text-4xl md:text-6xl font-bold bg-gradient-to-r from-blue-600 via-purple-600 to-indigo-600 bg-clip-text text-transparent">
+            🔍 What Is This?
+          </h1>
+          <p className="text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto">
+            Upload an image and identify objects using Azure Computer Vision AI
+          </p>
         </div>
 
-        {selectedImage && (
-          <div className="selected-image-container">
-            <h3>Selected Image:</h3>
-            <img
-              src={selectedImage}
-              alt="Selected for analysis"
-              className="selected-image"
-            />
+        {/* Demo Info (shown when Azure not configured) */}
+        {!isAzureConfigured && (
+          <div className="max-w-4xl mx-auto">
+            <DemoInfo />
           </div>
         )}
 
+        {/* Image Upload */}
+        <div className="max-w-2xl mx-auto">
+          <ImageUpload onImageSelect={handleImageSelect} disabled={loading} />
+        </div>
+
+        {/* Analysis Results */}
         <AnalysisResults
           results={analysisResult}
           loading={loading}
           error={error}
         />
-      </main>
 
-      <footer className="app-footer">
-        <p>Powered by Azure Computer Vision API</p>
-      </footer>
+        {/* Footer */}
+        <footer className="text-center text-sm text-muted-foreground py-8">
+          <p>Powered by Azure Computer Vision API</p>
+        </footer>
+      </div>
     </div>
   );
 }
