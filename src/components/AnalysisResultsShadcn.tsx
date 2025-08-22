@@ -2,6 +2,11 @@ import React, { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 import { Loader2, Search, Tag, FileText, AlertCircle } from "lucide-react";
 import type { AnalysisResult } from "@/services/azureVision";
 
@@ -112,37 +117,53 @@ const AnalysisResults: React.FC<AnalysisResultsProps> = ({
                   }}
                 />
                 {/* Render bounding boxes */}
-                {imageDimensions.displayWidth > 0 && imageDimensions.naturalWidth > 0 && results.objects.map((obj, index) => {
-                  const isSelected = selectedObjectIndex === index;
-                  const { x, y, w, h } = obj.rectangle;
+                {imageDimensions.displayWidth > 0 &&
+                  imageDimensions.naturalWidth > 0 &&
+                  results.objects.map((obj, index) => {
+                    const isSelected = selectedObjectIndex === index;
+                    const { x, y, w, h } = obj.rectangle;
 
-                  // Calculate scaled positions based on displayed image size vs natural size
-                  const scaleX = imageDimensions.displayWidth / imageDimensions.naturalWidth;
-                  const scaleY = imageDimensions.displayHeight / imageDimensions.naturalHeight;
+                    // Calculate scaled positions based on displayed image size vs natural size
+                    const scaleX =
+                      imageDimensions.displayWidth /
+                      imageDimensions.naturalWidth;
+                    const scaleY =
+                      imageDimensions.displayHeight /
+                      imageDimensions.naturalHeight;
 
-                  return (
-                    <div
-                      key={index}
-                      className={`absolute border-2 cursor-pointer transition-all duration-200 pointer-events-auto z-10 ${
-                        isSelected
-                          ? "border-red-500 bg-red-500/20 shadow-lg"
-                          : "border-blue-500 bg-blue-500/10 hover:border-blue-600"
-                      }`}
-                      style={{
-                        left: `${x * scaleX}px`,
-                        top: `${y * scaleY}px`,
-                        width: `${w * scaleX}px`,
-                        height: `${h * scaleY}px`,
-                      }}
-                      onClick={() =>
-                        setSelectedObjectIndex(isSelected ? null : index)
-                      }
-                      title={`${obj.object} (${(obj.confidence * 100).toFixed(
-                        1
-                      )}%)`}
-                    />
-                  );
-                })}
+                    return (
+                      <Tooltip key={index}>
+                        <TooltipTrigger asChild>
+                          <div
+                            className={`absolute border-2 cursor-pointer transition-all duration-200 pointer-events-auto z-10 ${
+                              isSelected
+                                ? "border-red-500 bg-red-500/20 shadow-lg"
+                                : "border-blue-500 bg-blue-500/10 hover:border-blue-600"
+                            }`}
+                            style={{
+                              left: `${x * scaleX}px`,
+                              top: `${y * scaleY}px`,
+                              width: `${w * scaleX}px`,
+                              height: `${h * scaleY}px`,
+                            }}
+                            onClick={() =>
+                              setSelectedObjectIndex(isSelected ? null : index)
+                            }
+                          />
+                        </TooltipTrigger>
+                        <TooltipContent className="bg-gray-900 text-white border-gray-700">
+                          <div className="flex flex-col items-center space-y-1">
+                            <span className="font-medium capitalize">
+                              {obj.object}
+                            </span>
+                            <span className="text-xs text-gray-300">
+                              {(obj.confidence * 100).toFixed(1)}% confidence
+                            </span>
+                          </div>
+                        </TooltipContent>
+                      </Tooltip>
+                    );
+                  })}
               </div>
             </CardContent>
           </Card>
@@ -179,30 +200,45 @@ const AnalysisResults: React.FC<AnalysisResultsProps> = ({
               <CardContent>
                 <div className="grid gap-4 sm:grid-cols-1">
                   {results.objects.map((obj, index) => (
-                    <div
-                      key={index}
-                      className={`flex items-center justify-between p-4 rounded-lg border bg-card gap-4 cursor-pointer transition-all duration-200 ${
-                        selectedObjectIndex === index
-                          ? "border-red-500 bg-red-50 dark:bg-red-950/20"
-                          : "hover:border-blue-500 hover:bg-blue-50 dark:hover:bg-blue-950/20"
-                      }`}
-                      onClick={() =>
-                        setSelectedObjectIndex(
-                          selectedObjectIndex === index ? null : index
-                        )
-                      }
-                    >
-                      <div className="flex items-center gap-3">
-                        <h4 className="font-medium capitalize">{obj.object}</h4>
-                        <Progress
-                          value={obj.confidence * 100}
-                          className="h-2"
-                        />
-                      </div>
-                      <Badge variant="secondary">
-                        {(obj.confidence * 100).toFixed(1)}%
-                      </Badge>
-                    </div>
+                    <Tooltip key={index}>
+                      <TooltipTrigger asChild>
+                        <div
+                          className={`flex items-center justify-between p-4 rounded-lg border bg-card gap-4 cursor-pointer transition-all duration-200 ${
+                            selectedObjectIndex === index
+                              ? "border-red-500 bg-red-50 dark:bg-red-950/20"
+                              : "hover:border-blue-500 hover:bg-blue-50 dark:hover:bg-blue-950/20"
+                          }`}
+                          onClick={() =>
+                            setSelectedObjectIndex(
+                              selectedObjectIndex === index ? null : index
+                            )
+                          }
+                        >
+                          <div className="flex items-center gap-3">
+                            <h4 className="font-medium capitalize">
+                              {obj.object}
+                            </h4>
+                            <Progress
+                              value={obj.confidence * 100}
+                              className="h-2"
+                            />
+                          </div>
+                          <Badge variant="secondary">
+                            {(obj.confidence * 100).toFixed(1)}%
+                          </Badge>
+                        </div>
+                      </TooltipTrigger>
+                      <TooltipContent className="bg-gray-900 text-white border-gray-700">
+                        <div className="flex flex-col items-center space-y-1">
+                          <span className="font-medium">
+                            Click to highlight on image
+                          </span>
+                          <span className="text-xs text-gray-300">
+                            Confidence: {(obj.confidence * 100).toFixed(1)}%
+                          </span>
+                        </div>
+                      </TooltipContent>
+                    </Tooltip>
                   ))}
                 </div>
               </CardContent>
