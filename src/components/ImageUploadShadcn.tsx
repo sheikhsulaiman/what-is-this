@@ -5,7 +5,7 @@ import { Upload, Image as ImageIcon, X } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 interface ImageUploadProps {
-  onImageSelect: (file: File) => void;
+  onImageSelect: (file: File, imageUrl: string) => void;
   disabled?: boolean;
 }
 
@@ -56,7 +56,7 @@ const ImageUpload: React.FC<ImageUploadProps> = ({
 
     const imageUrl = URL.createObjectURL(file);
     setPreviewUrl(imageUrl);
-    onImageSelect(file);
+    onImageSelect(file, imageUrl);
   };
 
   const onButtonClick = () => {
@@ -80,7 +80,7 @@ const ImageUpload: React.FC<ImageUploadProps> = ({
               <img
                 src={previewUrl}
                 alt="Preview"
-                className="w-full h-auto object-contain rounded-lg border"
+                className="w-24 h-24 object-contain rounded-lg border"
               />
               <div className="flex gap-3 justify-center">
                 <Button

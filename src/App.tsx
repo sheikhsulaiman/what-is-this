@@ -13,13 +13,15 @@ function App() {
   );
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [selectedImage, setSelectedImage] = useState<string | null>(null);
 
   // Check if Azure credentials are configured
   const isAzureConfigured =
     import.meta.env.VITE_AZURE_VISION_KEY &&
     import.meta.env.VITE_AZURE_VISION_ENDPOINT;
 
-  const handleImageSelect = async (file: File) => {
+  const handleImageSelect = async (file: File, imageUrl: string) => {
+    setSelectedImage(imageUrl);
     setAnalysisResult(null);
     setError(null);
 
@@ -54,7 +56,7 @@ function App() {
           Upload an image and identify objects using Azure Computer Vision AI
         </p>
       </div>
-      <div className="container mx-auto px-4 py-8 space-y-8 flex">
+      <div className="container mx-auto px-4 py-8 space-y-8">
         <div className="flex-1">
           {/* Demo Info (shown when Azure not configured) */}
           {!isAzureConfigured && (
@@ -73,6 +75,7 @@ function App() {
           results={analysisResult}
           loading={loading}
           error={error}
+          selectedImage={selectedImage}
         />
       </div>
       {/* Footer */}
