@@ -47,27 +47,25 @@ function App() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50 dark:from-gray-900 dark:via-blue-900 dark:to-purple-900">
-      <div className="container mx-auto px-4 py-8 space-y-8">
-        {/* Header */}
-        <div className="text-center space-y-4">
-          <h1 className="text-4xl md:text-6xl font-bold bg-gradient-to-r from-blue-600 via-purple-600 to-indigo-600 bg-clip-text text-transparent">
-            🔍 What Is This?
-          </h1>
-          <p className="text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto">
-            Upload an image and identify objects using Azure Computer Vision AI
-          </p>
-        </div>
-
-        {/* Demo Info (shown when Azure not configured) */}
-        {!isAzureConfigured && (
-          <div className="max-w-4xl mx-auto">
-            <DemoInfo />
+      {/* Header */}
+      <div className="text-center space-y-4 p-4">
+        <h1 className="text-4xl md:text-6xl font-bold">🔍 What Is This?</h1>
+        <p className="text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto">
+          Upload an image and identify objects using Azure Computer Vision AI
+        </p>
+      </div>
+      <div className="container mx-auto px-4 py-8 space-y-8 flex">
+        <div className="flex-1">
+          {/* Demo Info (shown when Azure not configured) */}
+          {!isAzureConfigured && (
+            <div className="max-w-4xl mx-auto">
+              <DemoInfo />
+            </div>
+          )}
+          {/* Image Upload */}
+          <div className="max-w-2xl mx-auto">
+            <ImageUpload onImageSelect={handleImageSelect} disabled={loading} />
           </div>
-        )}
-
-        {/* Image Upload */}
-        <div className="max-w-2xl mx-auto">
-          <ImageUpload onImageSelect={handleImageSelect} disabled={loading} />
         </div>
 
         {/* Analysis Results */}
@@ -76,12 +74,11 @@ function App() {
           loading={loading}
           error={error}
         />
-
-        {/* Footer */}
-        <footer className="text-center text-sm text-muted-foreground py-8">
-          <p>Powered by Azure Computer Vision API</p>
-        </footer>
       </div>
+      {/* Footer */}
+      <footer className="absolute bottom-0 left-0 right-0 text-center text-sm text-muted-foreground py-8">
+        <p>Powered by Azure Computer Vision API</p>
+      </footer>
     </div>
   );
 }

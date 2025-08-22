@@ -18,7 +18,7 @@ const AnalysisResults: React.FC<AnalysisResultsProps> = ({
 }) => {
   if (loading) {
     return (
-      <Card className="w-full max-w-2xl mx-auto">
+      <Card className="w-full max-w-2xl mx-auto flex-1">
         <CardContent className="flex flex-col items-center justify-center py-12 space-y-4">
           <Loader2 className="h-8 w-8 animate-spin text-primary" />
           <div className="text-center space-y-2">
@@ -34,7 +34,7 @@ const AnalysisResults: React.FC<AnalysisResultsProps> = ({
 
   if (error) {
     return (
-      <Card className="w-full max-w-2xl mx-auto border-destructive/50">
+      <Card className="w-full max-w-2xl mx-auto border-destructive/50 flex-1">
         <CardContent className="flex flex-col items-center justify-center py-12 space-y-4">
           <AlertCircle className="h-8 w-8 text-destructive" />
           <div className="text-center space-y-2">
@@ -53,8 +53,8 @@ const AnalysisResults: React.FC<AnalysisResultsProps> = ({
   }
 
   return (
-    <div className="w-full max-w-4xl mx-auto space-y-6">
-      <div className="text-center space-y-2">
+    <div className="w-full max-w-4xl mx-auto space-y-6 flex-1">
+      {/* <div className="text-center space-y-2">
         <h2 className="text-2xl font-bold flex items-center justify-center gap-2">
           <Search className="h-6 w-6" />
           Analysis Results
@@ -62,7 +62,7 @@ const AnalysisResults: React.FC<AnalysisResultsProps> = ({
         <p className="text-muted-foreground">
           Here's what our AI found in your image
         </p>
-      </div>
+      </div> */}
 
       <div className="grid gap-6 md:grid-cols-1">
         {/* Description */}
@@ -94,25 +94,22 @@ const AnalysisResults: React.FC<AnalysisResultsProps> = ({
               </CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="grid gap-4 sm:grid-cols-2">
+              <div className="grid gap-4 sm:grid-cols-1">
                 {results.objects.map((obj, index) => (
                   <div
                     key={index}
-                    className="space-y-3 p-4 rounded-lg border bg-card"
+                    className="flex items-center justify-between p-4 rounded-lg border bg-card gap-4"
                   >
-                    <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-3 flex-1">
                       <h4 className="font-medium capitalize">{obj.object}</h4>
-                      <Badge variant="secondary">
-                        {(obj.confidence * 100).toFixed(1)}%
-                      </Badge>
+                      <Progress
+                        value={obj.confidence * 100}
+                        className="h-2 flex-1"
+                      />
                     </div>
-                    <div className="space-y-2">
-                      <div className="flex justify-between text-xs text-muted-foreground">
-                        <span>Confidence</span>
-                        <span>{(obj.confidence * 100).toFixed(1)}%</span>
-                      </div>
-                      <Progress value={obj.confidence * 100} className="h-2" />
-                    </div>
+                    <Badge variant="secondary">
+                      {(obj.confidence * 100).toFixed(1)}%
+                    </Badge>
                   </div>
                 ))}
               </div>
