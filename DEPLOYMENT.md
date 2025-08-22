@@ -1,6 +1,7 @@
 # 🚀 Azure Deployment Checklist
 
 ## ✅ Pre-Deployment Setup (Completed)
+
 - [x] Project pushed to GitHub repository
 - [x] GitHub Actions workflow created
 - [x] Static Web App configuration added
@@ -9,13 +10,16 @@
 ## 📋 Azure Portal Deployment Steps
 
 ### Step 1: Create Azure Static Web App
+
 1. **Go to Azure Portal**: [portal.azure.com](https://portal.azure.com)
 2. **Click "Create a resource"**
 3. **Search for "Static Web Apps"** and select it
 4. **Click "Create"**
 
 ### Step 2: Basic Configuration
+
 Fill in these details:
+
 - **Subscription**: Your Azure subscription
 - **Resource Group**: Create new (e.g., "rg-what-is-this") or use existing
 - **Name**: `what-is-this-app` (or your preferred unique name)
@@ -23,6 +27,7 @@ Fill in these details:
 - **Region**: Choose closest to your users (e.g., East US, West Europe)
 
 ### Step 3: Deployment Source
+
 - **Source**: Select `GitHub`
 - **GitHub Account**: Authorize Azure to access your GitHub
 - **Organization**: Your GitHub username
@@ -30,12 +35,14 @@ Fill in these details:
 - **Branch**: `main`
 
 ### Step 4: Build Configuration
+
 - **Build Presets**: Select `React`
 - **App location**: `/` (root of repository)
 - **Api location**: Leave empty (no backend API)
 - **Output location**: `dist` (Vite's build output folder)
 
 ### Step 5: Review and Create
+
 - **Review all settings**
 - **Click "Create"**
 - **Wait for deployment to complete** (takes 2-3 minutes)
@@ -43,23 +50,26 @@ Fill in these details:
 ## 🔑 Environment Variables Configuration
 
 ### After Static Web App is Created:
+
 1. **Navigate to your Static Web App** in Azure Portal
 2. **Go to "Configuration"** in the left sidebar
 3. **Click "Application settings"**
 4. **Add these environment variables**:
 
-| Name | Value |
-|------|-------|
-| `VITE_AZURE_VISION_KEY` | Your Azure Computer Vision API Key |
+| Name                         | Value                                   |
+| ---------------------------- | --------------------------------------- |
+| `VITE_AZURE_VISION_KEY`      | Your Azure Computer Vision API Key      |
 | `VITE_AZURE_VISION_ENDPOINT` | Your Azure Computer Vision Endpoint URL |
 
 **Example values:**
+
 - Key: `1234567890abcdef1234567890abcdef`
 - Endpoint: `https://your-vision-resource.cognitiveservices.azure.com/`
 
 5. **Click "Save"** to apply the settings
 
 ## 🔧 GitHub Secrets (Optional - for custom workflow)
+
 If you want to use the custom GitHub Actions workflow:
 
 1. **Go to your GitHub repository**
@@ -72,6 +82,7 @@ If you want to use the custom GitHub Actions workflow:
 ## 🌐 Access Your Deployed App
 
 ### After Deployment:
+
 1. **Go to your Static Web App** in Azure Portal
 2. **Find the "URL"** on the Overview page
 3. **Click the URL** to access your live website
@@ -83,6 +94,7 @@ If you want to use the custom GitHub Actions workflow:
 ## 🔍 Verification Steps
 
 ### Test Your Deployed App:
+
 - [ ] Website loads successfully
 - [ ] UI renders correctly with all styling
 - [ ] Image upload functionality works
@@ -92,6 +104,7 @@ If you want to use the custom GitHub Actions workflow:
 - [ ] Responsive design works on mobile
 
 ### If Object Detection Doesn't Work:
+
 1. Check Azure Portal → Static Web App → Configuration
 2. Verify environment variables are set correctly
 3. Check browser console for errors
@@ -100,6 +113,7 @@ If you want to use the custom GitHub Actions workflow:
 ## 🎯 Next Steps After Deployment
 
 ### Optional Enhancements:
+
 1. **Custom Domain**: Configure a custom domain name
 2. **SSL Certificate**: Azure provides free SSL automatically
 3. **CDN**: Enable Azure CDN for better performance
@@ -107,6 +121,7 @@ If you want to use the custom GitHub Actions workflow:
 5. **Staging Slots**: Create staging environment for testing
 
 ### Production Considerations:
+
 - **Rate Limiting**: Monitor API usage to avoid limits
 - **Error Handling**: Add comprehensive error boundaries
 - **Analytics**: Add Google Analytics or similar
@@ -116,12 +131,14 @@ If you want to use the custom GitHub Actions workflow:
 ## 🆘 Troubleshooting
 
 ### Common Issues:
+
 1. **Build Fails**: Check GitHub Actions logs
 2. **Environment Variables Not Working**: Restart the Static Web App
 3. **404 Errors**: Check staticwebapp.config.json routing
 4. **CORS Issues**: Verify Azure Computer Vision endpoint
 
 ### Getting Help:
+
 - Azure documentation: [docs.microsoft.com/azure/static-web-apps](https://docs.microsoft.com/azure/static-web-apps)
 - GitHub Issues: Create an issue in your repository
 - Azure Support: Use Azure portal support
@@ -129,6 +146,7 @@ If you want to use the custom GitHub Actions workflow:
 ---
 
 ## 🎉 Congratulations!
-Once completed, your image object recognition website will be live on Azure! 
+
+Once completed, your image object recognition website will be live on Azure!
 
 **Remember to update your README.md with the live URL once deployed.**
