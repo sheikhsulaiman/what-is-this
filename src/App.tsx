@@ -81,6 +81,14 @@ function App() {
       {/* Footer */}
       <footer className="text-center text-sm text-muted-foreground py-8">
         <p>Powered by Azure Computer Vision API</p>
+        <p>
+          Made with ❤️ by{" "}
+          <span className="text-yellow-600 font-semibold">
+            <a href="https://www.sonyed.tech" className="underline">
+              Sheikh Sulaiman Sony
+            </a>
+          </span>
+        </p>
       </footer>
     </div>
   );
